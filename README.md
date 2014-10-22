@@ -1,2 +1,0 @@
-ballot_selection1
-=================
