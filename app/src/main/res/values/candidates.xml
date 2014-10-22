@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="number_of_candidates">6</integer>
+    <string name="candidate1">01 - Diego Maradona</string>
+    <string name="candidate2">02 - Homero Simpson</string>
+    <string name="candidate3">03 - Pedro Picapiedra</string>
+    <string name="candidate4">04 - Clark Kent</string>
+    <string name="candidate5">05 - Juan Carlos Bodoque</string>
+    <string name="candidate6">06 - Profesor Rossa</string>
+    <string name="blank_vote">Voto Blanco</string>
+
+</resources>
