@@ -86,7 +86,7 @@ public class BallotConfirmationActivity extends Activity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // TODO: Al apretar botón cancel, ir hacia atrás
             }
         });
     }
@@ -95,7 +95,7 @@ public class BallotConfirmationActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.ballot_confirmation, menu);
-        return true;
+        return false;
     }
 
     @Override

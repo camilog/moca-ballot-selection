@@ -27,6 +27,9 @@ public class CandidatesActivity extends Activity {
         for(int i = 0; i < candidatesButtons.length; i++){
             candidatesButtons[i] = new Button(this);
             candidatesButtons[i].setText(getResources().getText(R.string.candidate1 + i));
+
+            // TODO: "Embellecer" los botones
+
             buttonsLayout.addView(candidatesButtons[i]);
             final int j = i;
             candidatesButtons[i].setOnClickListener(new View.OnClickListener() {
@@ -42,6 +45,9 @@ public class CandidatesActivity extends Activity {
 
         final Button blankVoteButton = new Button(this);
         blankVoteButton.setText(R.string.blank_vote);
+
+        // TODO: "Embellecer" botón Voto Blanco
+
         buttonsLayout.addView(blankVoteButton);
         blankVoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +77,6 @@ public class CandidatesActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;

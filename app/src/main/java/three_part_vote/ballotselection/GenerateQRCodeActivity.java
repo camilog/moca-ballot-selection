@@ -53,7 +53,7 @@ public class GenerateQRCodeActivity extends Activity {
     }
 
     public Bitmap generateQRCodeBitmap(String data) throws WriterException {
-        BitMatrix bitMatrix = new QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, 500, 500);
+        BitMatrix bitMatrix = new QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, 400, 400);
 
         int width = bitMatrix.getWidth();
         int height = bitMatrix.getHeight();
@@ -74,7 +74,7 @@ public class GenerateQRCodeActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.generate_qrcode, menu);
-        return true;
+        return false;
     }
 
     @Override
