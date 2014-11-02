@@ -9,5 +9,6 @@
     <string name="confirmation">Ok</string>
     <string name="cancel_confirmation">Cancelar</string>
     <string name="title_activity_generate_qrcode">GenerateQRCodeActivity</string>
+    <string name="title_activity_read_key_to_sign">ReadKeyToSign</string>
 
 </resources>

@@ -3,10 +3,12 @@ package three_part_vote.ballotselection;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -15,15 +17,18 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.math.BigInteger;
 
-
 public class GenerateQRCodeActivity extends Activity {
 
     public static final String EXTRA_ENCRYPTED_BALLOT = "three_part_vote.ballotselection.encrypted_ballot";
     public static final String EXTRA_PLAIN_BALLOT = "three_part_vote.ballotselection.plain_ballot";
     public static final String EXTRA_RANDOMNESS = "three_part_vote.ballotselection.randomness";
-    private BigInteger encryptedBallot;
+    public static final String EXTRA_SIGNATURE = "three_part_vote.ballotselection.signature";
+
     private String plainBallot;
+    private BigInteger encryptedBallot;
+    private BigInteger signature;
     private BigInteger randomness;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +38,16 @@ public class GenerateQRCodeActivity extends Activity {
         ImageView randomnessQrcodeView = (ImageView)findViewById(R.id.randomness_view);
         TextView plainView = (TextView)findViewById(R.id.plain_view);
 
-        encryptedBallot = new BigInteger(getIntent().getByteArrayExtra(EXTRA_ENCRYPTED_BALLOT));
         plainBallot = getIntent().getStringExtra(EXTRA_PLAIN_BALLOT);
+        encryptedBallot = new BigInteger(getIntent().getByteArrayExtra(EXTRA_ENCRYPTED_BALLOT));
+        signature = new BigInteger(getIntent().getByteArrayExtra(EXTRA_SIGNATURE));
         randomness = new BigInteger(getIntent().getByteArrayExtra(EXTRA_RANDOMNESS));
 
         plainView.setText(plainBallot);
 
         try {
-            Bitmap ballotBitmap = generateQRCodeBitmap(encryptedBallot.toString());
+            // QR = Largo del EncryptedBallot (3 caracteres) + EncryptedBallot + Signature
+            Bitmap ballotBitmap = generateQRCodeBitmap(encryptedBallot.toString().length() + encryptedBallot.toString() + signature.toString());
             Bitmap randomnessBitmap = generateQRCodeBitmap(randomness.toString());
 
             ballotQrcodeView.setImageBitmap(ballotBitmap);
