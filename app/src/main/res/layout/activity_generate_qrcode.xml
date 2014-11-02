@@ -9,6 +9,7 @@
     tools:context="three_part_vote.ballotselection.GenerateQRCodeActivity">
 
     <LinearLayout
+        android:id="@+id/qrs_view"
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

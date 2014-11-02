@@ -3,12 +3,10 @@ package three_part_vote.ballotselection;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -29,11 +27,11 @@ public class GenerateQRCodeActivity extends Activity {
     private BigInteger signature;
     private BigInteger randomness;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_qrcode);
+
         ImageView ballotQrcodeView = (ImageView)findViewById(R.id.ballotQrcode_view);
         ImageView randomnessQrcodeView = (ImageView)findViewById(R.id.randomness_view);
         TextView plainView = (TextView)findViewById(R.id.plain_view);
