@@ -72,12 +72,18 @@ public class BallotConfirmationActivity extends Activity {
                     e.printStackTrace();
                 }
                 // TODO: Agrandar ballot para admitir más de 255 votos
-                // TODO: Aceptar voto blanco
 
-                // Los dos extras son para voto blanco y primer resultado como suma total de los votos
-                byte[] ballot_byteArray = new byte[getResources().getInteger(R.integer.number_of_candidates) + 2];
+                byte[] ballot_byteArray = new byte[getResources().getInteger(R.integer.number_of_candidates) + 2]; // Los dos extras son para voto blanco y primer resultado como suma total de los votos
+
                 ballot_byteArray[0] = 1;
-                int candidateSelectedNumber = Integer.parseInt((String) selectedCandidateText.subSequence(0, 2));
+
+                int candidateSelectedNumber;
+                try {
+                    candidateSelectedNumber = Integer.parseInt((String) selectedCandidateText.subSequence(0, 2));
+                } catch (NumberFormatException e) {
+                    candidateSelectedNumber = ballot_byteArray.length - 1;
+                }
+
                 ballot_byteArray[candidateSelectedNumber] = 1;
                 BigInteger ballot = new BigInteger(ballot_byteArray);
 
@@ -86,10 +92,9 @@ public class BallotConfirmationActivity extends Activity {
 
                 Intent intent = new Intent("com.google.zxing.client.android.SCAN");
                 intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                intent.putExtra("SCAN_CAMERA_ID", 1);
+                intent.putExtra("SCAN_CAMERA_ID", 0);
 
                 startActivityForResult(intent, 0);
-
             }
         });
 
@@ -97,13 +102,49 @@ public class BallotConfirmationActivity extends Activity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Al apretar botón cancel, ir hacia atrás
+                finish();
             }
         });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String stringPrivateKey = intent.getStringExtra("SCAN_RESULT");
+
+                // Handle successful scan
+                Intent intent2 = new Intent(this, GenerateQRCodeActivity.class);
+                intent2.putExtra(GenerateQRCodeActivity.EXTRA_ENCRYPTED_BALLOT, encryptedBallot);
+                intent2.putExtra(GenerateQRCodeActivity.EXTRA_PLAIN_BALLOT, selectedCandidateText);
+                intent2.putExtra(GenerateQRCodeActivity.EXTRA_RANDOMNESS, randomUsed);
+
+                try {
+                    byte[] privateKeyBytes = Base64.decode(stringPrivateKey.getBytes("utf-8"), Base64.DEFAULT);
+                    PKCS8EncodedKeySpec privateSpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+                    KeyFactory privateKeyFactory = KeyFactory.getInstance("RSA");
+                    PrivateKey privateKey = privateKeyFactory.generatePrivate(privateSpec);
+
+                    Signature signature = Signature.getInstance("SHA1withRSA");
+                    signature.initSign(privateKey, new SecureRandom());
+
+                    signature.update(encryptedBallot);
+                    sigBytes = signature.sign();
+
+                    intent2.putExtra(GenerateQRCodeActivity.EXTRA_SIGNATURE, sigBytes);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                startActivity(intent2);
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+                Toast toast = Toast.makeText(this, "Scan was Cancelled!", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 25, 400);
+                toast.show();
+
+            }
+            /*
             if (resultCode == RESULT_OK) {
                 Intent intent2 = new Intent("com.google.zxing.client.android.SCAN");
                 intent2.putExtra("SCAN_MODE", "QR_CODE_MODE");
@@ -118,8 +159,11 @@ public class BallotConfirmationActivity extends Activity {
                 toast.setGravity(Gravity.TOP, 25, 400);
                 toast.show();
             }
+            */
         }
+        /*
         else if (requestCode == 1) {
+
             if (resultCode == RESULT_OK) {
                 String stringPrivateKey_2 = intent.getStringExtra("SCAN_RESULT");
                 String stringPrivateKey = stringPrivateKey_1.concat(stringPrivateKey_2);
@@ -156,7 +200,7 @@ public class BallotConfirmationActivity extends Activity {
                 toast.show();
 
             }
-        }
+        }*/
     }
 
     @Override

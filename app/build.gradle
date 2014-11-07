@@ -3,10 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 19
     buildToolsVersion "20.0.0"
-
     defaultConfig {
         applicationId "three_part_vote.ballotselection"
-        minSdkVersion 18
+        minSdkVersion 19
         targetSdkVersion 19
         versionCode 1
         versionName "1.0"
@@ -17,6 +16,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
 }
 
 repositories {
@@ -24,9 +25,10 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.google.zxing:core:3.1.0'
     compile 'com.google.zxing:javase:3.1.0'
     compile 'com.google.zxing:android-core:3.1.0'
     compile 'com.google.zxing:android-integration:3.1.0'
+    compile "com.android.support:support-v4:19.0.+"
 }

@@ -2,7 +2,12 @@ package three_part_vote.ballotselection;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintJob;
+import android.support.v4.print.PrintHelper;
+import android.util.Printer;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -55,6 +60,12 @@ public class GenerateQRCodeActivity extends Activity {
             e.printStackTrace();
         }
 
+    }
+
+    private void doPhotoPrint(Bitmap bitmap) {
+        PrintHelper photoPrinter = new PrintHelper(this);
+        photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+        photoPrinter.printBitmap("example.jpg - test print", bitmap);
     }
 
     public Bitmap generateQRCodeBitmap(String data) throws WriterException {
