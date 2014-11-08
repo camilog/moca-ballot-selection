@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer name="number_of_candidates">10</integer>
-    <string name="candidate01">01 - Diego Maradona</string>
-    <string name="candidate02">02 - Homero Simpson</string>
-    <string name="candidate03">03 - Pedro Picapiedra</string>
-    <string name="candidate04">04 - Clark Kent</string>
-    <string name="candidate05">05 - Juan Carlos Bodoque</string>
-    <string name="candidate06">06 - Profesor Rossa</string>
-    <string name="candidate07">07 - Samir</string>
-    <string name="candidate08">08 - Google</string>
-    <string name="candidate09">09 - LacNIC</string>
-    <string name="candidate10">10 - Semana Computina</string>
+    <integer name="number_of_candidates">9</integer>
+
+    <string name="candidate01">01 - Franco Parisi</string>
+    <string name="candidate02">02 - Marcel Claude</string>
+    <string name="candidate03">03 - Ricardo Israel</string>
+    <string name="candidate04">04 - Marco Enriquez-Ominami</string>
+    <string name="candidate05">05 - Roxana Miranda</string>
+    <string name="candidate06">06 - Michelle Bachelet</string>
+    <string name="candidate07">07 - Evelyn Matthei</string>
+    <string name="candidate08">08 - Alfredo Sfeir</string>
+    <string name="candidate09">09 - Tomas Jocelyn-Holt</string>
     <string name="blank_vote">Voto Blanco</string>
 
 </resources>

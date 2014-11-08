@@ -1,4 +1,31 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/candidates_listview"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/question"
+        android:textAlignment="center"
+        android:layout_margin="15sp"
+        android:padding="20dp"
+        android:textSize="40dp"
+        android:layout_gravity="center"
+        android:textColor="@android:color/holo_blue_dark"
+        android:typeface="monospace"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:visibility="visible"
+        android:background="@android:color/darker_gray"/>
+
+    <ListView
+        android:id="@+id/candidates_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+
+

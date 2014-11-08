@@ -1,6 +1,8 @@
 package three_part_vote.ballotselection;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -37,8 +39,6 @@ public class BallotConfirmationActivity extends Activity {
     private byte[] randomUsed;
     private byte[] sigBytes;
 
-    String stringPrivateKey_1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +49,11 @@ public class BallotConfirmationActivity extends Activity {
         selectedCandidateView = (TextView)findViewById(R.id.selected_candidate);
         selectedCandidateView.setText(selectedCandidateText);
 
-        confirmate = (Button)findViewById(R.id.confirmation_button);
-        confirmate.setOnClickListener(new View.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.dialog_message).setTitle(R.string.dialog_title);
+        builder.setNeutralButton(R.string.dialog_neutral, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(DialogInterface dialog, int which) {
                 final Paillier p = new Paillier();
                 BigInteger n, nSquare, g;
                 AssetManager assetManager = getApplicationContext().getAssets();
@@ -95,6 +96,15 @@ public class BallotConfirmationActivity extends Activity {
                 intent.putExtra("SCAN_CAMERA_ID", 0);
 
                 startActivityForResult(intent, 0);
+            }
+        });
+        final AlertDialog dialog = builder.create();
+
+        confirmate = (Button)findViewById(R.id.confirmation_button);
+        confirmate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.show();
             }
         });
 
@@ -144,63 +154,7 @@ public class BallotConfirmationActivity extends Activity {
                 toast.show();
 
             }
-            /*
-            if (resultCode == RESULT_OK) {
-                Intent intent2 = new Intent("com.google.zxing.client.android.SCAN");
-                intent2.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                intent2.putExtra("SCAN_CAMERA_ID", 1);
-
-                stringPrivateKey_1 = intent.getStringExtra("SCAN_RESULT");
-
-                startActivityForResult(intent2, 1);
-            } else if (resultCode == RESULT_CANCELED) {
-                // Handle cancel
-                Toast toast = Toast.makeText(this, "Scan was Cancelled!", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 25, 400);
-                toast.show();
-            }
-            */
         }
-        /*
-        else if (requestCode == 1) {
-
-            if (resultCode == RESULT_OK) {
-                String stringPrivateKey_2 = intent.getStringExtra("SCAN_RESULT");
-                String stringPrivateKey = stringPrivateKey_1.concat(stringPrivateKey_2);
-
-                // Handle successful scan
-                Intent intent3 = new Intent(this, GenerateQRCodeActivity.class);
-                intent3.putExtra(GenerateQRCodeActivity.EXTRA_ENCRYPTED_BALLOT, encryptedBallot);
-                intent3.putExtra(GenerateQRCodeActivity.EXTRA_PLAIN_BALLOT, selectedCandidateText);
-                intent3.putExtra(GenerateQRCodeActivity.EXTRA_RANDOMNESS, randomUsed);
-
-                try {
-                    byte[] privateKeyBytes = Base64.decode(stringPrivateKey.getBytes("utf-8"), Base64.DEFAULT);
-                    PKCS8EncodedKeySpec privateSpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-                    KeyFactory privateKeyFactory = KeyFactory.getInstance("RSA");
-                    PrivateKey privateKey = privateKeyFactory.generatePrivate(privateSpec);
-
-                    Signature signature = Signature.getInstance("SHA1withRSA");
-                    signature.initSign(privateKey, new SecureRandom());
-
-                    signature.update(encryptedBallot);
-                    sigBytes = signature.sign();
-
-                    intent3.putExtra(GenerateQRCodeActivity.EXTRA_SIGNATURE, sigBytes);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                startActivity(intent3);
-
-            } else if (resultCode == RESULT_CANCELED) {
-                // Handle cancel
-                Toast toast = Toast.makeText(this, "Scan was Cancelled!", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 25, 400);
-                toast.show();
-
-            }
-        }*/
     }
 
     @Override
@@ -209,6 +163,9 @@ public class BallotConfirmationActivity extends Activity {
         getMenuInflater().inflate(R.menu.ballot_confirmation, menu);
         return false;
     }
+
+    @Override
+    public void onBackPressed(){}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

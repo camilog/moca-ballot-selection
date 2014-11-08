@@ -42,7 +42,7 @@ public class CandidatesActivity extends Activity {
         for (int i = 0; i < candidates.length; ++i) {
             list.add(candidates[i]);
         }
-        list.add("Voto Blanco");
+        list.add(getResources().getString(R.string.blank_vote));
 
         final CandidatesArrayAdapter adapter = new CandidatesArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
@@ -91,8 +91,7 @@ public class CandidatesActivity extends Activity {
     }
 
     @Override
-    public void onBackPressed(){
-    }
+    public void onBackPressed(){}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

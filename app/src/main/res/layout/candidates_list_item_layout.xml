@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@android:color/white" >
 
     <Button
         android:id="@+id/candidates_button"
@@ -11,6 +13,8 @@
         android:layout_margin="15sp"
         android:padding="20dp"
         android:textSize="40dp"
+        android:background="@drawable/btn_blue"
+        style="@style/ButtonTextCandidate"
         xmlns:android="http://schemas.android.com/apk/res/android" />
 
 </LinearLayout>
