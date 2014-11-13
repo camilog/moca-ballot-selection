@@ -11,7 +11,7 @@
     <string name="print_ballot">Imprimir Voto</string>
     <string name="question">Presidente de la Republica</string>
     <string name="dialog_title">AVISO</string>
-    <string name="dialog_message">A continuación acerque su clave privada (firma electrónica) a la camara para validar su voto</string>
+    <string name="dialog_message">Al apretar \'Continuar\' acerque su clave privada (firma electrónica) a la cámara para validar su voto.</string>
     <string name="dialog_neutral">Continuar</string>
     <string name="title_activity_generate_qrcode">GenerateQRCodeActivity</string>
     <string name="title_activity_read_key_to_sign">ReadKeyToSign</string>

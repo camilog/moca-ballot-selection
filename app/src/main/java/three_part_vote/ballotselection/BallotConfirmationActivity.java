@@ -2,6 +2,7 @@ package three_part_vote.ballotselection;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,12 +34,9 @@ public class BallotConfirmationActivity extends Activity {
     private TextView selectedCandidateView;
     private CharSequence selectedCandidateText;
 
-    private Button confirmate;
-    private Button cancel;
+    private Button confirmate, cancel;
 
-    private byte[] encryptedBallot;
-    private byte[] randomUsed;
-    private byte[] sigBytes;
+    private byte[] encryptedBallot, randomUsed, sigBytes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

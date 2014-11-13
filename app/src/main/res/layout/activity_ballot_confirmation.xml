@@ -31,24 +31,24 @@
         android:padding="25dp" >
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/confirmation_button"
             android:text="@string/confirmation"
             android:textSize="30dp"
             android:background="@drawable/btn_green"
             style="@style/ButtonText"
-            android:layout_marginEnd="30dp" />
+            android:layout_marginRight="30dp" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/cancel_confirmation_button"
             android:text="@string/cancel_confirmation"
             android:textSize="30dp"
             android:background="@drawable/btn_red"
             style="@style/ButtonText"
-            android:layout_marginEnd="30dp" />
+            android:layout_marginLeft="30dp" />
 
     </LinearLayout>
 
