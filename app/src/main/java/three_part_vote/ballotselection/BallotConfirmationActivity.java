@@ -2,15 +2,13 @@ package three_part_vote.ballotselection;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +24,9 @@ import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
+
+import paillierp.Paillier;
+import paillierp.key.PaillierKey;
 
 public class BallotConfirmationActivity extends Activity {
 
@@ -53,26 +54,18 @@ public class BallotConfirmationActivity extends Activity {
         builder.setNeutralButton(R.string.dialog_neutral, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final Paillier p = new Paillier();
-                BigInteger n, nSquare, g;
+
+                BigInteger publicKeyN = null;
                 AssetManager assetManager = getApplicationContext().getAssets();
+
                 try {
-                    ObjectInputStream oin_g = new ObjectInputStream(new BufferedInputStream(assetManager.open("publicKey_g.key")));
-                    ObjectInputStream oin_n = new ObjectInputStream(new BufferedInputStream(assetManager.open("publicKey_n.key")));
-                    ObjectInputStream oin_nSquare = new ObjectInputStream(new BufferedInputStream(assetManager.open("publicKey_nSquare.key")));
-
-                    g = (BigInteger)oin_g.readObject();
-                    n = (BigInteger)oin_n.readObject();
-                    nSquare = (BigInteger)oin_nSquare.readObject();
-
-                    p.setG(g);
-                    p.setN(n);
-                    p.setNsquare(nSquare);
+                    ObjectInputStream oin_key = new ObjectInputStream(new BufferedInputStream(assetManager.open("publicKeyN.key")));
+                    publicKeyN = (BigInteger) oin_key.readObject();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                // TODO: Agrandar ballot para admitir más de 255 votos
 
+                // TODO: Agrandar ballot para admitir más de 255 votos
                 byte[] ballot_byteArray = new byte[getResources().getInteger(R.integer.number_of_candidates) + 2]; // Los dos extras son para voto blanco y primer resultado como suma total de los votos
 
                 ballot_byteArray[0] = 1;
@@ -87,8 +80,24 @@ public class BallotConfirmationActivity extends Activity {
                 ballot_byteArray[candidateSelectedNumber] = 1;
                 BigInteger ballot = new BigInteger(ballot_byteArray);
 
-                encryptedBallot = p.Encryption(ballot).toByteArray();
-                randomUsed = p.getR().toByteArray();
+                PaillierKey publicKey = new PaillierKey(publicKeyN, new SecureRandom());
+                BigInteger random = new BigInteger(publicKey.getPublicKey().getK(), new SecureRandom());
+
+                Paillier p = new Paillier(publicKey);
+
+                boolean v = true;
+                while (v) {
+                    try{
+                        encryptBallot(p, random, ballot);
+                        v = false;
+                    } catch (Exception e)
+                    {
+                        random = new BigInteger(publicKey.getPublicKey().getK(), new SecureRandom());
+                        v = true;
+                    }
+                }
+
+                randomUsed = random.toByteArray();
 
                 Intent intent = new Intent("com.google.zxing.client.android.SCAN");
                 intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
@@ -114,6 +123,10 @@ public class BallotConfirmationActivity extends Activity {
                 finish();
             }
         });
+    }
+
+    private void encryptBallot(Paillier p, BigInteger random, BigInteger ballot) {
+        encryptedBallot = p.encrypt(ballot, random).toByteArray();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -177,4 +190,7 @@ public class BallotConfirmationActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
 }

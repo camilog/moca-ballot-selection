@@ -1,15 +1,17 @@
 package three_part_vote.ballotselection;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.os.Bundle;
-import android.print.PrintDocumentAdapter;
-import android.print.PrintJob;
 import android.support.v4.print.PrintHelper;
-import android.util.Printer;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.math.BigInteger;
+import java.util.Random;
 
 public class GenerateQRCodeActivity extends Activity {
 
@@ -40,6 +43,7 @@ public class GenerateQRCodeActivity extends Activity {
         ImageView ballotQrcodeView = (ImageView)findViewById(R.id.ballotQrcode_view);
         ImageView randomnessQrcodeView = (ImageView)findViewById(R.id.randomness_view);
         TextView plainView = (TextView)findViewById(R.id.plain_view);
+        Button printingButton = (Button)findViewById(R.id.print_button);
 
         plainBallot = getIntent().getStringExtra(EXTRA_PLAIN_BALLOT);
         encryptedBallot = new BigInteger(getIntent().getByteArrayExtra(EXTRA_ENCRYPTED_BALLOT));
@@ -60,12 +64,44 @@ public class GenerateQRCodeActivity extends Activity {
             e.printStackTrace();
         }
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.dialog_final_message);
+        builder.setTitle(R.string.dialog_title);
+        builder.setNeutralButton("Finalizar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(GenerateQRCodeActivity.this, CandidatesActivity.class);
+                intent.putExtra("needToClose", true);
+                startActivity(intent);
+            }
+        });
+        final AlertDialog dialog = builder.create();
+
+        printingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap ballot = screenShot(findViewById(R.id.totalBallot_view));
+                doPrint(ballot);
+                dialog.show();
+            }
+        });
+
     }
 
-    private void doPhotoPrint(Bitmap bitmap) {
-        PrintHelper photoPrinter = new PrintHelper(this);
-        photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-        photoPrinter.printBitmap("example.jpg - test print", bitmap);
+    public Bitmap screenShot(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
+                view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
+
+    private void doPrint(Bitmap bitmap) {
+        Random r = new Random();
+        PrintHelper ballotPrinter = new PrintHelper(this);
+        ballotPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+        ballotPrinter.setColorMode(PrintHelper.COLOR_MODE_MONOCHROME);
+        ballotPrinter.printBitmap("ballot" + r.nextInt(1000) + ".jpg", bitmap);
     }
 
     public Bitmap generateQRCodeBitmap(String data) throws WriterException {

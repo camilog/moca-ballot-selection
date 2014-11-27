@@ -85,6 +85,7 @@
     <orderEntry type="library" exported="" name="core-3.1.0" level="project" />
     <orderEntry type="library" exported="" name="javase-3.1.0" level="project" />
     <orderEntry type="library" exported="" name="android-core-3.1.0" level="project" />
+    <orderEntry type="library" exported="" name="paillier" level="project" />
   </component>
 </module>
 

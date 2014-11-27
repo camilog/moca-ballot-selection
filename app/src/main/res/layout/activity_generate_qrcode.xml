@@ -2,14 +2,15 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:id="@+id/totalBallot_view">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/plain_view"
-        android:layout_margin="60dp"
-        android:textSize="45dp"
+        android:layout_margin="125dp"
+        android:textSize="60dp"
         android:layout_gravity="center" />
 
     <View
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/ballotQrcode_view"
         android:layout_gravity="center"
-        android:layout_margin="25dp"/>
+        android:layout_margin="5dp"/>
 
     <View
         android:layout_width="match_parent"
@@ -34,7 +35,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/randomness_view"
         android:layout_gravity="center"
-        android:layout_margin="25dp" />
+        android:layout_margin="5dp" />
 
     <View
         android:layout_width="match_parent"
@@ -45,9 +46,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="30dp">
 
         <Button
+            android:id="@+id/print_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/print_ballot"

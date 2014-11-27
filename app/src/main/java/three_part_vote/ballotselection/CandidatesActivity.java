@@ -3,28 +3,22 @@ package three_part_vote.ballotselection;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
 
 public class CandidatesActivity extends Activity {
+
+    boolean neverClosed = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,4 +100,13 @@ public class CandidatesActivity extends Activity {
 
     }
 
+    @Override
+    protected void onStart() {
+        boolean needToClose = getIntent().getBooleanExtra("needToClose", false);
+        if (needToClose && neverClosed) {
+            moveTaskToBack(true);
+            neverClosed = false;
+        }
+        super .onStart();
+    }
 }

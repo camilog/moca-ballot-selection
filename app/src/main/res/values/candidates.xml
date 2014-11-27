@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer name="number_of_candidates">9</integer>
+    <!--<integer name="number_of_candidates">9</integer>-->
+    <integer name="number_of_candidates">8</integer>
 
-    <string name="candidate01">01 - Franco Parisi</string>
+    <string name="candidate01">01 - Java</string>
+    <string name="candidate02">02 - Python</string>
+    <string name="candidate03">03 - C++</string>
+    <string name="candidate04">04 - Ruby</string>
+    <string name="candidate05">05 - Scala</string>
+    <string name="candidate06">06 - PHP</string>
+    <string name="candidate07">07 - Smalltalk</string>
+    <string name="candidate08">08 - Otro</string>
+    <string name="blank_vote">Voto Blanco</string>
+
+
+    <!--<string name="candidate01">01 - Franco Parisi</string>
     <string name="candidate02">02 - Marcel Claude</string>
     <string name="candidate03">03 - Ricardo Israel</string>
     <string name="candidate04">04 - Marco Enriquez-Ominami</string>
@@ -12,6 +24,6 @@
     <string name="candidate07">07 - Evelyn Matthei</string>
     <string name="candidate08">08 - Alfredo Sfeir</string>
     <string name="candidate09">09 - Tomas Jocelyn-Holt</string>
-    <string name="blank_vote">Voto Blanco</string>
+    <string name="blank_vote">Voto Blanco</string>-->
 
 </resources>
