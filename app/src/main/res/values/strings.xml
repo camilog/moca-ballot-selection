@@ -15,5 +15,6 @@
     <string name="dialog_final_message">Una vez impreso su voto, proceda a la verificación de la encriptación de su voto</string>
     <string name="dialog_neutral">Continuar</string>
     <string name="title_activity_generate_qrcode">GenerateQRCodeActivity</string>
+    <string name="title_activity_show_qr">ShowQRActivity</string>
 
 </resources>

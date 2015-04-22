@@ -112,7 +112,57 @@ public class BallotConfirmationActivity extends Activity {
         confirmate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.show();
+                // dialog.show();
+                BigInteger publicKeyN = null;
+                AssetManager assetManager = getApplicationContext().getAssets();
+
+                try {
+                    ObjectInputStream oin_key = new ObjectInputStream(new BufferedInputStream(assetManager.open("publicKeyN.key")));
+                    publicKeyN = (BigInteger) oin_key.readObject();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // TODO: Agrandar ballot para admitir más de 255 votos
+                byte[] ballot_byteArray = new byte[getResources().getInteger(R.integer.number_of_candidates) + 2]; // Los dos extras son para voto blanco y primer resultado como suma total de los votos
+
+                ballot_byteArray[0] = 1;
+
+                int candidateSelectedNumber;
+                try {
+                    candidateSelectedNumber = Integer.parseInt((String) selectedCandidateText.subSequence(0, 2));
+                } catch (NumberFormatException e) {
+                    candidateSelectedNumber = ballot_byteArray.length - 1;
+                }
+
+                ballot_byteArray[candidateSelectedNumber] = 1;
+                BigInteger ballot = new BigInteger(ballot_byteArray);
+
+                PaillierKey publicKey = new PaillierKey(publicKeyN, new SecureRandom());
+                BigInteger random = new BigInteger(publicKey.getPublicKey().getK(), new SecureRandom());
+
+                Paillier p = new Paillier(publicKey);
+
+                boolean v = true;
+                while (v) {
+                    try{
+                        encryptBallot(p, random, ballot);
+                        v = false;
+                    } catch (Exception e)
+                    {
+                        random = new BigInteger(publicKey.getPublicKey().getK(), new SecureRandom());
+                        v = true;
+                    }
+                }
+
+                randomUsed = random.toByteArray();
+
+
+                Intent intent = new Intent(BallotConfirmationActivity.this, ShowQRActivity.class);
+                intent.putExtra(ShowQRActivity.EXTRA_ENCRYPTED_BALLOT, encryptedBallot);
+                intent.putExtra(ShowQRActivity.EXTRA_PLAIN_BALLOT, selectedCandidateText);
+                intent.putExtra(ShowQRActivity.EXTRA_RANDOMNESS, randomUsed);
+                startActivity(intent);
             }
         });
 
