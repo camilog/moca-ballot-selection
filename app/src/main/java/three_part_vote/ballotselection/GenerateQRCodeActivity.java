@@ -25,38 +25,45 @@ import java.util.Random;
 
 public class GenerateQRCodeActivity extends Activity {
 
-    public static final String EXTRA_ENCRYPTED_BALLOT = "three_part_vote.ballotselection.encrypted_ballot";
-    public static final String EXTRA_PLAIN_BALLOT = "three_part_vote.ballotselection.plain_ballot";
-    public static final String EXTRA_RANDOMNESS = "three_part_vote.ballotselection.randomness";
-    public static final String EXTRA_SIGNATURE = "three_part_vote.ballotselection.signature";
-
+    // EXTRA to store the encryption, randomness, signature (byte[]) and selectedCandidate (String)
+    public static final String EXTRA_ENCRYPTED_BALLOT = "three_part_vote.ballotselection.encrypted_ballot",
+                               EXTRA_PLAIN_BALLOT = "three_part_vote.ballotselection.plain_ballot",
+                               EXTRA_RANDOMNESS = "three_part_vote.ballotselection.randomness",
+                               EXTRA_SIGNATURE = "three_part_vote.ballotselection.signature";
     private String plainBallot;
-    private BigInteger encryptedBallot;
-    private BigInteger signature;
-    private BigInteger randomness;
+    private BigInteger encryptedBallot,
+                       signature,
+                       randomness;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_qrcode);
 
+        // Retrieve elements of the View
         ImageView ballotQrcodeView = (ImageView)findViewById(R.id.ballotQrcode_view);
         ImageView randomnessQrcodeView = (ImageView)findViewById(R.id.randomness_view);
         TextView plainView = (TextView)findViewById(R.id.plain_view);
         Button printingButton = (Button)findViewById(R.id.print_button);
 
+        // Variables to store the data retrieved from the previous activity (encryptedBallot, randomness, selectedCandidate and signature)
         plainBallot = getIntent().getStringExtra(EXTRA_PLAIN_BALLOT);
         encryptedBallot = new BigInteger(getIntent().getByteArrayExtra(EXTRA_ENCRYPTED_BALLOT));
         signature = new BigInteger(getIntent().getByteArrayExtra(EXTRA_SIGNATURE));
         randomness = new BigInteger(getIntent().getByteArrayExtra(EXTRA_RANDOMNESS));
 
+        // Set text to the first part of the view with the selectedCandidate
         plainView.setText(plainBallot);
 
+        // Generation of the 2 QR-Codes
         try {
-            // QR = Largo del EncryptedBallot (3 caracteres) + EncryptedBallot + Signature
+            // First QR-Code: encryptedBallot length (3 characters) + encryptedBallot + signature
             Bitmap ballotBitmap = generateQRCodeBitmap(encryptedBallot.toString().length() + encryptedBallot.toString() + signature.toString());
+
+            // Second QR-Code: randomness used to encrypt the ballot previously shown
             Bitmap randomnessBitmap = generateQRCodeBitmap(randomness.toString());
 
+            // Set QR-Code in the correspondent ImageView
             ballotQrcodeView.setImageBitmap(ballotBitmap);
             randomnessQrcodeView.setImageBitmap(randomnessBitmap);
 
@@ -64,12 +71,15 @@ public class GenerateQRCodeActivity extends Activity {
             e.printStackTrace();
         }
 
+        // Create and set-up of the dialog shown after printing the ballot (describing next steps)
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.dialog_final_message);
         builder.setTitle(R.string.dialog_title);
         builder.setNeutralButton("Finalizar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // Close the application after printing the ballot
+                // TODO: Need to check if this is a good way to finish the application
                 Intent intent = new Intent(GenerateQRCodeActivity.this, CandidatesActivity.class);
                 intent.putExtra("needToClose", true);
                 startActivity(intent);
@@ -77,18 +87,26 @@ public class GenerateQRCodeActivity extends Activity {
         });
         final AlertDialog dialog = builder.create();
 
+        // Add listener to the printingButton, ie, print the ballot
         printingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Create screenshot and store it in a Bitmap to print
                 Bitmap ballot = screenShot(findViewById(R.id.totalBallot_view));
+
+                // Print the ballot
                 doPrint(ballot);
+
+                // Show the dialog previously configured
                 dialog.show();
             }
         });
 
     }
 
+    // Function to take an screenshot of the view, necessary to print the ballot shown in the screen
     public Bitmap screenShot(View view) {
+        // TODO: Cut button "Print Ballot"
         Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
                 view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -96,7 +114,9 @@ public class GenerateQRCodeActivity extends Activity {
         return bitmap;
     }
 
+    // Function to print a Bitmap, in this case, the screenshot taken previously
     private void doPrint(Bitmap bitmap) {
+        // TODO: Automatize this and try to print directly to the printer
         Random r = new Random();
         PrintHelper ballotPrinter = new PrintHelper(this);
         ballotPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
@@ -104,6 +124,7 @@ public class GenerateQRCodeActivity extends Activity {
         ballotPrinter.printBitmap("ballot" + r.nextInt(1000) + ".jpg", bitmap);
     }
 
+    // Function to generate QRCode Bitmap from a String
     public Bitmap generateQRCodeBitmap(String data) throws WriterException {
         BitMatrix bitMatrix = new QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, 400, 400);
 
@@ -121,6 +142,9 @@ public class GenerateQRCodeActivity extends Activity {
         return bitmap;
     }
 
+    // Eliminate function of Back Button of the device
+    @Override
+    public void onBackPressed() {}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -128,9 +152,6 @@ public class GenerateQRCodeActivity extends Activity {
         getMenuInflater().inflate(R.menu.generate_qrcode, menu);
         return false;
     }
-
-    @Override
-    public void onBackPressed() {}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -143,4 +164,5 @@ public class GenerateQRCodeActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
