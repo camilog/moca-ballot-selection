@@ -31,9 +31,7 @@ public class GenerateQRCodeActivity extends Activity {
                                EXTRA_RANDOMNESS = "three_part_vote.ballotselection.randomness",
                                EXTRA_SIGNATURE = "three_part_vote.ballotselection.signature";
     private String plainBallot;
-    private BigInteger encryptedBallot,
-                       signature,
-                       randomness;
+    private byte[] encryptedBallot, signature, randomness;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +46,9 @@ public class GenerateQRCodeActivity extends Activity {
 
         // Variables to store the data retrieved from the previous activity (encryptedBallot, randomness, selectedCandidate and signature)
         plainBallot = getIntent().getStringExtra(EXTRA_PLAIN_BALLOT);
-        encryptedBallot = new BigInteger(getIntent().getByteArrayExtra(EXTRA_ENCRYPTED_BALLOT));
-        signature = new BigInteger(getIntent().getByteArrayExtra(EXTRA_SIGNATURE));
-        randomness = new BigInteger(getIntent().getByteArrayExtra(EXTRA_RANDOMNESS));
+        encryptedBallot = getIntent().getByteArrayExtra(EXTRA_ENCRYPTED_BALLOT);
+        signature = getIntent().getByteArrayExtra(EXTRA_SIGNATURE);
+        randomness = getIntent().getByteArrayExtra(EXTRA_RANDOMNESS);
 
         // Set text to the first part of the view with the selectedCandidate
         plainView.setText(plainBallot);
@@ -58,10 +56,13 @@ public class GenerateQRCodeActivity extends Activity {
         // Generation of the 2 QR-Codes
         try {
             // First QR-Code: encryptedBallot length (3 characters) + encryptedBallot + signature
-            Bitmap ballotBitmap = generateQRCodeBitmap(encryptedBallot.toString().length() + encryptedBallot.toString() + signature.toString());
+            String encryptedBallotString = new BigInteger(encryptedBallot).toString();
+            String signatureString = new BigInteger(signature).toString();
+            Bitmap ballotBitmap = generateQRCodeBitmap(encryptedBallotString.length() + encryptedBallotString + signatureString, 1);
 
             // Second QR-Code: randomness used to encrypt the ballot previously shown
-            Bitmap randomnessBitmap = generateQRCodeBitmap(randomness.toString());
+            String randomnessString = new BigInteger(randomness).toString();
+            Bitmap randomnessBitmap = generateQRCodeBitmap(randomnessString, 0);
 
             // Set QR-Code in the correspondent ImageView
             ballotQrcodeView.setImageBitmap(ballotBitmap);
@@ -80,7 +81,7 @@ public class GenerateQRCodeActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 // Close the application after printing the ballot
                 // TODO: Need to check if this is a good way to finish the application
-                Intent intent = new Intent(GenerateQRCodeActivity.this, CandidatesActivity.class);
+                Intent intent = new Intent(GenerateQRCodeActivity.this, DisplayCandidatesActivity.class);
                 intent.putExtra("needToClose", true);
                 startActivity(intent);
             }
@@ -107,8 +108,7 @@ public class GenerateQRCodeActivity extends Activity {
     // Function to take an screenshot of the view, necessary to print the ballot shown in the screen
     public Bitmap screenShot(View view) {
         // TODO: Cut button "Print Ballot"
-        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
-                view.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth() - 50, view.getHeight() - 60, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         view.draw(canvas);
         return bitmap;
@@ -125,7 +125,7 @@ public class GenerateQRCodeActivity extends Activity {
     }
 
     // Function to generate QRCode Bitmap from a String
-    public Bitmap generateQRCodeBitmap(String data) throws WriterException {
+    public Bitmap generateQRCodeBitmap(String data, int color) throws WriterException {
         BitMatrix bitMatrix = new QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, 400, 400);
 
         int width = bitMatrix.getWidth();
@@ -134,8 +134,13 @@ public class GenerateQRCodeActivity extends Activity {
         for (int y = 0; y < height; y++)
         {
             int offset = y * width;
-            for (int x = 0; x < width; x++)
-                pixels[offset + x] = bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF;
+            for (int x = 0; x < width; x++) {
+                //pixels[offset + x] = bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF;
+                if (color > 0)
+                    pixels[offset + x] = bitMatrix.get(x, y) ? 0xFFFF0000 : 0xFFFFFFFF;
+                else
+                    pixels[offset + x] = bitMatrix.get(x, y) ? 0xFF0000FF : 0xFFFFFFFF;
+            }
         }
 
         Bitmap bitmap = Bitmap.createBitmap(pixels, width, height, Bitmap.Config.ARGB_8888);

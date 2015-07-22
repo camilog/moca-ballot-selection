@@ -1,61 +1,96 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:orientation="horizontal"
     android:background="@android:color/white"
     android:id="@+id/totalBallot_view">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/plain_view"
-        android:layout_margin="125dp"
-        android:textSize="60dp"
-        android:layout_gravity="center" />
-
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ballotQrcode_view"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/randomness_view"
-        android:layout_gravity="center"
-        android:layout_margin="5dp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black" />
+        android:layout_width="1dp"
+        android:layout_height="1154dp"
+        android:background="@android:color/black"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="10dp" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp">
+        android:layout_width="600dp"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:layout_gravity="center_horizontal" >
 
-        <Button
-            android:id="@+id/print_button"
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/black" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/print_ballot"
-            android:padding="15dp"
-            android:textSize="30dp" />
+            android:id="@+id/plain_view"
+            android:layout_margin="125dp"
+            android:textSize="60dp"
+            android:layout_gravity="center" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/black" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ballotQrcode_view"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="1dp"
+            android:background="@android:color/black" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/randomness_view"
+            android:layout_gravity="center"
+            android:layout_margin="5dp" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="1dp"
+            android:background="@android:color/black" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp">
+
+            <Button
+                android:id="@+id/print_button"
+                android:background="@drawable/btn_green"
+                style="@style/ButtonText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/print_ballot"
+                android:padding="15dp"
+                android:textSize="30dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="1154dp"
+        android:background="@android:color/black"
+        android:layout_marginRight="100dp"
+        android:layout_marginTop="10dp"/>
 
 </LinearLayout>

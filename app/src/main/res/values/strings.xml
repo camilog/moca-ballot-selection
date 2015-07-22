@@ -16,5 +16,7 @@
     <string name="dialog_neutral">Continuar</string>
     <string name="title_activity_generate_qrcode">GenerateQRCodeActivity</string>
     <string name="title_activity_show_qr">ShowQRActivity</string>
+    <string name="continue_to_receive_signature">Recibir Firma</string>
+    <string name="read_encrypted_qr">Proceda a leer el siguiente código QR con su App SignatureBallot</string>
 
 </resources>

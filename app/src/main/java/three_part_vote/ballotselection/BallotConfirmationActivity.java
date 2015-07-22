@@ -1,29 +1,19 @@
 package three_part_vote.ballotselection;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.util.Base64;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.ObjectInputStream;
 import java.math.BigInteger;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
 import java.security.SecureRandom;
-import java.security.Signature;
-import java.security.spec.PKCS8EncodedKeySpec;
 
 import paillierp.Paillier;
 import paillierp.key.PaillierKey;
@@ -78,12 +68,12 @@ public class BallotConfirmationActivity extends Activity {
                 randomUsed = random.toByteArray();
 
                 // Create intent to initialize the next activity (ShowQR)
-                Intent intent = new Intent(BallotConfirmationActivity.this, ShowQRActivity.class);
+                Intent intent = new Intent(BallotConfirmationActivity.this, ShowEncryptedBallotQRActivity.class);
 
                 // Pass the values of the selectedCandidate, encryption and randomness to the next activity
-                intent.putExtra(ShowQRActivity.EXTRA_ENCRYPTED_BALLOT, encryptedBallot);
-                intent.putExtra(ShowQRActivity.EXTRA_PLAIN_BALLOT, selectedCandidateText);
-                intent.putExtra(ShowQRActivity.EXTRA_RANDOMNESS, randomUsed);
+                intent.putExtra(ShowEncryptedBallotQRActivity.EXTRA_ENCRYPTED_BALLOT, encryptedBallot);
+                intent.putExtra(ShowEncryptedBallotQRActivity.EXTRA_PLAIN_BALLOT, selectedCandidateText);
+                intent.putExtra(ShowEncryptedBallotQRActivity.EXTRA_RANDOMNESS, randomUsed);
 
                 // Start ShowQR
                 startActivity(intent);
@@ -108,7 +98,7 @@ public class BallotConfirmationActivity extends Activity {
         // Retrieve publicKey from local file using an assetManager, and store it in publicKeyN
         AssetManager assetManager = getApplicationContext().getAssets();
         try {
-            ObjectInputStream oin_key = new ObjectInputStream(new BufferedInputStream(assetManager.open("publicKeyN.key")));
+            ObjectInputStream oin_key = new ObjectInputStream(new BufferedInputStream(assetManager.open("publicKeyN")));
             publicKeyN = (BigInteger) oin_key.readObject();
         } catch (Exception e) {
             e.printStackTrace();
