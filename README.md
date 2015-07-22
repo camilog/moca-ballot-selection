@@ -17,9 +17,11 @@ Android app where the voter make her selections, then the app encrypts it, next 
 
 ### How to Use
 * Make sure you satisfy the minimum requirements described above.
-* Install the .apk file, which can be downloaded from [here](http://www.cjgomez.cl)
+* Install the .apk file, which can be downloaded from [here](http://www.cjgomez.cl).
+
 #### Configuration
 * At the first execution of the app, it needs to be configured with the address of the Bulletin Board server, so the app can download the candidates file and the public key from the authority.
+
 #### Voting Process
 * The voter first of all, make her selection of the candidate that want to vote for.
 * Then, the app ask for a confirmation for the selection the voter did.
