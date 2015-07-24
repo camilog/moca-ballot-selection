@@ -1,7 +1,7 @@
 # BallotSelection
-Third part of the project [*Voter-Ballot Self Verification*](http://www.cjgomez.cl).
+Third part of the project [*Voter-Ballot Self Verification*](https://github.com/CamiloG/VoterBallotSelfVerificationSystem).
 
-Android app where the voter make her selections, then the app encrypts it, next the voter sign this encryption with her app [SignatureApp](http://wwww.cjgomez.cl) and finally the ballot is printed.
+Android app where the voter make her selections, then the app encrypts it, next the voter sign this encryption with her app [SignatureApp](https://github.com/CamiloG/SignatureApp) and finally the ballot is printed.
 
 ## Files
 1. **DisplayCandidatesActivity.java**:
@@ -17,7 +17,7 @@ Android app where the voter make her selections, then the app encrypts it, next 
 
 ## How to Use
 * Make sure you satisfy the minimum requirements described above.
-* Install the .apk file, which can be downloaded from [here](http://www.cjgomez.cl).
+* Install the .apk file, which can be downloaded from [here](https://github.com/CamiloG/VoterBallotSelfVerificationSystem/blob/master/Precinct_Apps/ballotSelection.apk?raw=true).
 
 ### Configuration
 * At the first execution of the app, it needs to be configured with the address of the Bulletin Board server, so the app can download the candidates file and the public key from the authority.
