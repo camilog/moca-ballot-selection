@@ -1,5 +1,5 @@
 # BallotSelection
-Third part of the project [*Voter-Ballot Self Verification*](https://github.com/CamiloG/VoterBallotSelfVerificationSystem).
+Third part of the [*MoCa QR*](https://github.com/CamiloG/moca_qr) Voting System project.
 
 Android app where the voter make her selections, then the app encrypts it, next the voter sign this encryption with her app [SignatureApp](https://github.com/CamiloG/SignatureApp) and finally the ballot is printed.
 
@@ -17,7 +17,7 @@ Android app where the voter make her selections, then the app encrypts it, next 
 
 ## How to Use
 * Make sure you satisfy the minimum requirements described above.
-* Install the .apk file, which can be downloaded from [here](https://github.com/CamiloG/VoterBallotSelfVerificationSystem/blob/master/Precinct_Apps/ballotSelection.apk?raw=true).
+* Install the .apk file, which can be downloaded from [here](https://github.com/CamiloG/moca_qr/blob/master/Precinct_Apps/ballotSelection.apk?raw=true).
 
 ### Configuration
 * At the first execution of the app, it needs to be configured with the address of the Bulletin Board server, so the app can download the candidates file and the public key from the authority.
