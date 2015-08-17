@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="@string/read_encrypted_qr"
         android:typeface="monospace"
-        android:textSize="25dp"
+        android:textSize="50dp"
         android:padding="25dp"
         android:layout_marginTop="200dp"
         android:layout_gravity="center_horizontal"

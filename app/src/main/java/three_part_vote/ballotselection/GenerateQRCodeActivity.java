@@ -42,7 +42,7 @@ public class GenerateQRCodeActivity extends Activity {
         ImageView ballotQrcodeView = (ImageView)findViewById(R.id.ballotQrcode_view);
         ImageView randomnessQrcodeView = (ImageView)findViewById(R.id.randomness_view);
         TextView plainView = (TextView)findViewById(R.id.plain_view);
-        Button printingButton = (Button)findViewById(R.id.print_button);
+        // Button printingButton = (Button)findViewById(R.id.print_button);
 
         // Variables to store the data retrieved from the previous activity (encryptedBallot, randomness, selectedCandidate and signature)
         plainBallot = getIntent().getStringExtra(EXTRA_PLAIN_BALLOT);
@@ -89,7 +89,7 @@ public class GenerateQRCodeActivity extends Activity {
         final AlertDialog dialog = builder.create();
 
         // Add listener to the printingButton, ie, print the ballot
-        printingButton.setOnClickListener(new View.OnClickListener() {
+        /*printingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Create screenshot and store it in a Bitmap to print
@@ -101,7 +101,7 @@ public class GenerateQRCodeActivity extends Activity {
                 // Show the dialog previously configured
                 dialog.show();
             }
-        });
+        });*/
 
     }
 
@@ -137,7 +137,7 @@ public class GenerateQRCodeActivity extends Activity {
             for (int x = 0; x < width; x++) {
                 //pixels[offset + x] = bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF;
                 if (color > 0)
-                    pixels[offset + x] = bitMatrix.get(x, y) ? 0xFFFF0000 : 0xFFFFFFFF;
+                    pixels[offset + x] = bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF;
                 else
                     pixels[offset + x] = bitMatrix.get(x, y) ? 0xFF0000FF : 0xFFFFFFFF;
             }

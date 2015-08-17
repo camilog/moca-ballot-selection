@@ -3,7 +3,8 @@
     android:layout_width="fill_parent"
     android:orientation="horizontal"
     android:background="@android:color/white"
-    android:id="@+id/totalBallot_view">
+    android:id="@+id/totalBallot_view"
+    android:layout_marginTop="40dp" >
 
     <View
         android:layout_width="1dp"
@@ -72,7 +73,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="25dp">
 
-            <Button
+            <!--<Button
                 android:id="@+id/print_button"
                 android:background="@drawable/btn_green"
                 style="@style/ButtonText"
@@ -80,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/print_ballot"
                 android:padding="15dp"
-                android:textSize="30dp" />
+                android:textSize="30dp" />-->
 
         </LinearLayout>
 
