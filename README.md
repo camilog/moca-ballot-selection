@@ -1,7 +1,7 @@
 # BallotSelection
-Third part of the [*MoCa QR*](https://github.com/CamiloG/moca_qr) Voting System project.
+Third part of the [*MoCa QR*](http://mocaqr.niclabs.cl) Voting System project.
 
-Android app where the voter makes her selections, then the app encrypts them, next the voter signs this encryption with her app [SignatureApp](https://github.com/CamiloG/SignatureApp) and finally the ballot is printed.
+Android app where the voter makes her selections, then the app encrypts them, next the voter signs this encryption with her [VoterApp](https://github.com/niclabs/moca-voter-app) and finally the ballot is printed.
 
 ## Files
 1. **DisplayCandidatesActivity.java**:
