@@ -1,4 +1,4 @@
-package three_part_vote.ballotselection;
+package three_part_vote.ballotSelection;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

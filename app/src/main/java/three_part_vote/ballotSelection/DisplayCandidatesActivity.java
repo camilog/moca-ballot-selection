@@ -1,4 +1,4 @@
-package three_part_vote.ballotselection;
+package three_part_vote.ballotSelection;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DisplayCandidatesActivity extends Activity {
-
-    // Variable to restore app if it's closed. TODO: Check if it's working
-    boolean neverClosed = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,21 +99,6 @@ public class DisplayCandidatesActivity extends Activity {
             return view;
         }
     }
-
-    // Function to fix problem of close app, has to be with variable needToClose. TODO: Check if it's working
-    @Override
-    protected void onStart() {
-        boolean needToClose = getIntent().getBooleanExtra("needToClose", false);
-        if (needToClose && neverClosed) {
-            moveTaskToBack(true);
-            neverClosed = false;
-        }
-        super .onStart();
-    }
-
-    // Eliminate function of Back Button of the device
-    @Override
-    public void onBackPressed(){}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

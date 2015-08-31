@@ -1,4 +1,4 @@
-package three_part_vote.ballotselection;
+package three_part_vote.ballotSelection;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -157,10 +157,6 @@ public class BallotConfirmationActivity extends Activity {
         // Stores in encryptedBallot the encryption made
         encryptedBallot = p.encrypt(ballot, random).toByteArray();
     }
-
-    // Eliminate function of Back Button of the device
-    @Override
-    public void onBackPressed(){}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
