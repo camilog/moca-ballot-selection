@@ -84,11 +84,11 @@ public class DisplayCandidatesActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     // Create intent to initialize the next activity (BallotConfirmation)
-                    Intent intent = new Intent(DisplayCandidatesActivity.this, BallotConfirmationActivity.class);
+                    Intent intent = new Intent(DisplayCandidatesActivity.this, ConfirmationAndEncryptionActivity.class);
 
                     // Retrieve candidate which is being pressed and pass it to the next activity
                     CharSequence candidateSelected = button.getText();
-                    intent.putExtra(BallotConfirmationActivity.EXTRA_SELECTED_CANDIDATE, candidateSelected);
+                    intent.putExtra(ConfirmationAndEncryptionActivity.EXTRA_SELECTED_CANDIDATE, candidateSelected);
 
                     // Start BallotConfirmation
                     startActivity(intent);

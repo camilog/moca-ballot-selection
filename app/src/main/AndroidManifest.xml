@@ -22,15 +22,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="three_part_vote.ballotSelection.BallotConfirmationActivity"
+            android:name=".ConfirmationAndEncryptionActivity"
             android:label="@string/title_activity_ballot_confirmation" >
         </activity>
         <activity
-            android:name="three_part_vote.ballotSelection.GenerateQRCodeActivity"
+            android:name=".DisplayQRBallotActivity"
             android:label="@string/title_activity_generate_qrcode" >
         </activity>
         <activity
-            android:name="three_part_vote.ballotSelection.ShowEncryptedBallotQRActivity"
+            android:name=".DisplayQREncryptedVoteActivity"
             android:label="@string/title_activity_show_qr" >
         </activity>
     </application>
