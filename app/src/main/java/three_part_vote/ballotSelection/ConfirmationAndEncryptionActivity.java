@@ -92,51 +92,22 @@ public class ConfirmationAndEncryptionActivity extends Activity {
             e.printStackTrace();
         }
 
-        // Create int[] with the plain vote
-        int[] plainVoteIntArray = new int[getResources().getInteger(R.integer.number_of_candidates) + 2];
-
-        // First position with a 1 to get the total of votes at the end in the first position
-        plainVoteIntArray[0] = 1;
+        // Total number of candidates in the election
+        int numberOfCandidates = getResources().getInteger(R.integer.number_of_candidates);
 
         // Get the position of the selectedCandidate, which has to be as the first characters of the name. If it isn't (throws exception) is because is a blank vote
         int candidateSelectedNumber;
         try {
             candidateSelectedNumber = Integer.parseInt((String) selectedCandidateText.subSequence(0, 2));
         } catch (NumberFormatException e) {
-            candidateSelectedNumber = plainVoteIntArray.length - 1;
+            candidateSelectedNumber = numberOfCandidates + 1;
         }
 
-        // Put a 1 in that position, relative to the selectedCandidate
-        plainVoteIntArray[candidateSelectedNumber] = 1;
+        // Create the object Plain Vote
+        PlainVote plainVote = new PlainVote(numberOfCandidates, candidateSelectedNumber);
 
-        // Transform int[] to byte[]
-        ByteBuffer byteBuffer = ByteBuffer.allocate(plainVoteIntArray.length * 4);
-        IntBuffer intBuffer = byteBuffer.asIntBuffer();
-        intBuffer.put(plainVoteIntArray);
-        byte[] plainVoteByteArray = byteBuffer.array();
-
-        // Create BigInteger with the plain vote, to the later encryption
-        BigInteger ballot = new BigInteger(plainVoteByteArray);
-
-        /*// Creation of the ballot as a byte[] with size of number of candidates + 2 (one for get the total of votes and other for the blank vote)
-        byte[] ballot_byteArray = new byte[getResources().getInteger(R.integer.number_of_candidates) + 2];
-
-        // First position with a 1 to get the total of votes at the end in the first position
-        ballot_byteArray[0] = 1;
-
-        // Get the position of the selectedCandidate, which has to be as the first characters of the name. If it isn't (throws exception) is because is a blank vote
-        int candidateSelectedNumber;
-        try {
-            candidateSelectedNumber = Integer.parseInt((String) selectedCandidateText.subSequence(0, 2));
-        } catch (NumberFormatException e) {
-            candidateSelectedNumber = ballot_byteArray.length - 1;
-        }
-
-        // Put a 1 in that position, relative to the selectedCandidate
-        ballot_byteArray[candidateSelectedNumber] = 1;
-
-        // Create BigInteger with the ballot, to the later encryption
-        BigInteger ballot = new BigInteger(ballot_byteArray);*/
+        // Transform Plain Vote to Big Integer
+        BigInteger ballot = plainVote.toBigInteger();
 
         // Creating the publicKey with the Paillier scheme, and having as basis the publicKey retrieved before
         PaillierKey publicKey = new PaillierKey(publicKeyN, new SecureRandom());
