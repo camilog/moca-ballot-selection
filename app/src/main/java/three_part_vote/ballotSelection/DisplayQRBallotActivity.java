@@ -54,8 +54,8 @@ public class DisplayQRBallotActivity extends Activity {
             String encryptedBallotString = new BigInteger(encryptedVote).toString();
             String signatureString = new BigInteger(signature).toString();
 
-            String ballotJson = "{\"ballot\": {\"enc\":" + encryptedBallotString + ",\"sign\":" + signatureString + "}}";
-            Bitmap ballotBitmap = generateQRCodeBitmap(ballotJson, 1);
+            String ballotString = encryptedBallotString + "#" + signatureString;
+            Bitmap ballotBitmap = generateQRCodeBitmap(ballotString, 1);
 
             // Second QR-Code: randomness used to encrypt the ballot previously shown
             String randomnessString = new BigInteger(randomness).toString();
