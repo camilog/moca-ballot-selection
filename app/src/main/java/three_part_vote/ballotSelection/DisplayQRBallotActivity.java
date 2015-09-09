@@ -32,7 +32,7 @@ public class DisplayQRBallotActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_generate_qrcode);
+        setContentView(R.layout.activity_display_qr_ballot);
 
         // Retrieve elements of the View
         TextView plainView = (TextView)findViewById(R.id.plain_view);
@@ -99,7 +99,6 @@ public class DisplayQRBallotActivity extends Activity {
 
     // Function to take an screenshot of the view, necessary to print the ballot shown in the screen
     public Bitmap screenShot(View view) {
-        // TODO: Cut button "Print Ballot"
         Bitmap bitmap = Bitmap.createBitmap(view.getWidth() - 50, view.getHeight() - 60, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         view.draw(canvas);

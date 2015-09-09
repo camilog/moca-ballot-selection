@@ -34,7 +34,7 @@ public class DisplayQREncryptedVoteActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_qr);
+        setContentView(R.layout.activity_display_qr_encrypted_vote);
 
         // Variables to store the data retrieved from the previous activity (encryptedVote, randomness and selectedCandidate)
         encryptedVote = getIntent().getByteArrayExtra(EXTRA_ENCRYPTED_VOTE);

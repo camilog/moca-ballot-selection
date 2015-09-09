@@ -21,7 +21,7 @@ public class DisplayCandidatesActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_candidates);
+        setContentView(R.layout.activity_display_candidates);
 
         // Retrieve ListView where the candidates will be display
         ListView listView = (ListView) findViewById(R.id.candidates_listview);

@@ -13,8 +13,6 @@ import android.widget.TextView;
 import java.io.BufferedInputStream;
 import java.io.ObjectInputStream;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.security.SecureRandom;
 
 import paillierp.Paillier;
@@ -37,7 +35,7 @@ public class ConfirmationAndEncryptionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ballot_confirmation);
+        setContentView(R.layout.activity_confirmation_and_encryption);
 
         // Retrieve the EXTRA and store it for later use
         selectedCandidateText = getIntent().getCharSequenceExtra(EXTRA_SELECTED_CANDIDATE);
