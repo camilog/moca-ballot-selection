@@ -1,4 +1,4 @@
-package three_part_vote.ballotselection;
+package three_part_vote.ballotSelection;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,10 +18,11 @@ import java.security.SecureRandom;
 import paillierp.Paillier;
 import paillierp.key.PaillierKey;
 
-public class BallotConfirmationActivity extends Activity {
+public class ConfirmationAndEncryptionActivity extends Activity {
 
     // EXTRA to store candidate selected (CharSequence)
     public static final String EXTRA_SELECTED_CANDIDATE = "three_part_vote.ballotselection.selected_candidate";
+
     private CharSequence selectedCandidateText;
 
     // Elements of the view
@@ -34,7 +35,7 @@ public class BallotConfirmationActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ballot_confirmation);
+        setContentView(R.layout.activity_confirmation_and_encryption);
 
         // Retrieve the EXTRA and store it for later use
         selectedCandidateText = getIntent().getCharSequenceExtra(EXTRA_SELECTED_CANDIDATE);
@@ -43,37 +44,22 @@ public class BallotConfirmationActivity extends Activity {
         selectedCandidateView = (TextView)findViewById(R.id.selected_candidate);
         selectedCandidateView.setText(selectedCandidateText);
 
-        /*
-        TODO: Check if include dialog now that the Signature is made with another device
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.dialog_message).setTitle(R.string.dialog_title);
-        builder.setNeutralButton(R.string.dialog_neutral, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do something!
-            }
-        });
-        final AlertDialog dialog = builder.create();
-        */
-
         // Retrieve confirmation (OK) button and add Listener to the action
         confirmate = (Button)findViewById(R.id.confirmation_button);
         confirmate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // dialog.show();
-
                 // Encryption procedure of the candidate selected and store of the randomness used
                 BigInteger random = encryptionProcedure();
                 randomUsed = random.toByteArray();
 
                 // Create intent to initialize the next activity (ShowQR)
-                Intent intent = new Intent(BallotConfirmationActivity.this, ShowEncryptedBallotQRActivity.class);
+                Intent intent = new Intent(ConfirmationAndEncryptionActivity.this, DisplayQREncryptedVoteActivity.class);
 
-                // Pass the values of the selectedCandidate, encryption and randomness to the next activity
-                intent.putExtra(ShowEncryptedBallotQRActivity.EXTRA_ENCRYPTED_BALLOT, encryptedBallot);
-                intent.putExtra(ShowEncryptedBallotQRActivity.EXTRA_PLAIN_BALLOT, selectedCandidateText);
-                intent.putExtra(ShowEncryptedBallotQRActivity.EXTRA_RANDOMNESS, randomUsed);
+                // Pass the values of the select4edCandidate, encryption and randomness to the next activity
+                intent.putExtra(DisplayQREncryptedVoteActivity.EXTRA_ENCRYPTED_VOTE, encryptedBallot);
+                intent.putExtra(DisplayQREncryptedVoteActivity.EXTRA_PLAIN_BALLOT, selectedCandidateText);
+                intent.putExtra(DisplayQREncryptedVoteActivity.EXTRA_RANDOMNESS, randomUsed);
 
                 // Start ShowQR
                 startActivity(intent);
@@ -104,26 +90,22 @@ public class BallotConfirmationActivity extends Activity {
             e.printStackTrace();
         }
 
-        // TODO: Agrandar ballot para admitir más de 255 votos
-        // Creation of the ballot as a byte[] with size of number of candidates + 2 (one for get the total of votes and other for the blank vote)
-        byte[] ballot_byteArray = new byte[getResources().getInteger(R.integer.number_of_candidates) + 2];
-
-        // First position with a 1 to get the total of votes at the end in the first position
-        ballot_byteArray[0] = 1;
+        // Total number of candidates in the election
+        int numberOfCandidates = getResources().getInteger(R.integer.number_of_candidates);
 
         // Get the position of the selectedCandidate, which has to be as the first characters of the name. If it isn't (throws exception) is because is a blank vote
         int candidateSelectedNumber;
         try {
             candidateSelectedNumber = Integer.parseInt((String) selectedCandidateText.subSequence(0, 2));
         } catch (NumberFormatException e) {
-            candidateSelectedNumber = ballot_byteArray.length - 1;
+            candidateSelectedNumber = numberOfCandidates + 1;
         }
 
-        // Put a 1 in that position, relative to the selectedCandidate
-        ballot_byteArray[candidateSelectedNumber] = 1;
+        // Create the object Plain Vote
+        PlainVote plainVote = new PlainVote(numberOfCandidates, candidateSelectedNumber);
 
-        // Create BigInteger with the ballot, to the later encryption
-        BigInteger ballot = new BigInteger(ballot_byteArray);
+        // Transform Plain Vote to Big Integer
+        BigInteger ballot = plainVote.toBigInteger();
 
         // Creating the publicKey with the Paillier scheme, and having as basis the publicKey retrieved before
         PaillierKey publicKey = new PaillierKey(publicKeyN, new SecureRandom());
@@ -138,7 +120,7 @@ public class BallotConfirmationActivity extends Activity {
         boolean v = true;
         while (v) {
             try{
-                // Function that actually encrypts, leaving in encryptedBallot the final encryption
+                // Function that actually encrypts, leaving in encryptedVote the final encryption
                 encryptBallot(p, random, ballot);
                 v = false;
             } catch (Exception e)
@@ -154,13 +136,9 @@ public class BallotConfirmationActivity extends Activity {
 
     // Function to directly encrypt the Ballot, using the parameters of the scheme, the randomness and the ballot itself
     private void encryptBallot(Paillier p, BigInteger random, BigInteger ballot) {
-        // Stores in encryptedBallot the encryption made
+        // Stores in encryptedVote the encryption made
         encryptedBallot = p.encrypt(ballot, random).toByteArray();
     }
-
-    // Eliminate function of Back Button of the device
-    @Override
-    public void onBackPressed(){}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -180,7 +158,5 @@ public class BallotConfirmationActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
 }

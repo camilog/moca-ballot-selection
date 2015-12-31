@@ -1,4 +1,4 @@
-package three_part_vote.ballotselection;
+package three_part_vote.ballotSelection;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,13 +18,10 @@ import java.util.List;
 
 public class DisplayCandidatesActivity extends Activity {
 
-    // Variable to restore app if it's closed. TODO: Check if it's working
-    boolean neverClosed = true;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_candidates);
+        setContentView(R.layout.activity_display_candidates);
 
         // Retrieve ListView where the candidates will be display
         ListView listView = (ListView) findViewById(R.id.candidates_listview);
@@ -87,11 +84,11 @@ public class DisplayCandidatesActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     // Create intent to initialize the next activity (BallotConfirmation)
-                    Intent intent = new Intent(DisplayCandidatesActivity.this, BallotConfirmationActivity.class);
+                    Intent intent = new Intent(DisplayCandidatesActivity.this, ConfirmationAndEncryptionActivity.class);
 
                     // Retrieve candidate which is being pressed and pass it to the next activity
                     CharSequence candidateSelected = button.getText();
-                    intent.putExtra(BallotConfirmationActivity.EXTRA_SELECTED_CANDIDATE, candidateSelected);
+                    intent.putExtra(ConfirmationAndEncryptionActivity.EXTRA_SELECTED_CANDIDATE, candidateSelected);
 
                     // Start BallotConfirmation
                     startActivity(intent);
@@ -102,21 +99,6 @@ public class DisplayCandidatesActivity extends Activity {
             return view;
         }
     }
-
-    // Function to fix problem of close app, has to be with variable needToClose. TODO: Check if it's working
-    @Override
-    protected void onStart() {
-        boolean needToClose = getIntent().getBooleanExtra("needToClose", false);
-        if (needToClose && neverClosed) {
-            moveTaskToBack(true);
-            neverClosed = false;
-        }
-        super .onStart();
-    }
-
-    // Eliminate function of Back Button of the device
-    @Override
-    public void onBackPressed(){}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

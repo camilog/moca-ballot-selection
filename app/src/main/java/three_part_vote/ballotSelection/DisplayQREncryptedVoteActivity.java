@@ -1,10 +1,9 @@
-package three_part_vote.ballotselection;
+package three_part_vote.ballotSelection;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,19 +18,14 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.math.BigInteger;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.SecureRandom;
-import java.security.Signature;
-import java.security.spec.PKCS8EncodedKeySpec;
 
-public class ShowEncryptedBallotQRActivity extends Activity {
+public class DisplayQREncryptedVoteActivity extends Activity {
 
     // EXTRA to store the encryption (byte[]), the randomness used (byte[]) and the selectedCandidate (CharSequence)
-    public static final String EXTRA_ENCRYPTED_BALLOT = "three_part_vote.ballotselection.showqr.encrypted_ballot",
+    public static final String EXTRA_ENCRYPTED_VOTE = "three_part_vote.ballotselection.showqr.encrypted_vote",
                                EXTRA_RANDOMNESS = "three_part_vote.ballotselection.showqr.randomness",
                                EXTRA_PLAIN_BALLOT = "three_part_vote.ballotselection.showqr.selected_candidate";
-    byte[] encryptedBallot,randomness;
+    byte[] encryptedVote,randomness;
     CharSequence selectedCandidateText;
 
     // byte[] to store the signature retrieved from the other device
@@ -40,10 +34,10 @@ public class ShowEncryptedBallotQRActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_qr);
+        setContentView(R.layout.activity_display_qr_encrypted_vote);
 
-        // Variables to store the data retrieved from the previous activity (encryptedBallot, randomness and selectedCandidate)
-        encryptedBallot = getIntent().getByteArrayExtra(EXTRA_ENCRYPTED_BALLOT);
+        // Variables to store the data retrieved from the previous activity (encryptedVote, randomness and selectedCandidate)
+        encryptedVote = getIntent().getByteArrayExtra(EXTRA_ENCRYPTED_VOTE);
         randomness = getIntent().getByteArrayExtra(EXTRA_RANDOMNESS);
         selectedCandidateText = getIntent().getStringExtra(EXTRA_PLAIN_BALLOT);
 
@@ -53,8 +47,8 @@ public class ShowEncryptedBallotQRActivity extends Activity {
 
         // Create the QR-Code of the encryption and place it in the imageView
         try {
-            String encryptedBallotString = new BigInteger(encryptedBallot).toString();
-            qrImageView.setImageBitmap(generateQRCodeBitmap(encryptedBallotString));
+            String encryptedVoteString = new BigInteger(encryptedVote).toString();
+            qrImageView.setImageBitmap(generateQRCodeBitmap(encryptedVoteString));
         } catch (WriterException e) {
             e.printStackTrace();
         }
@@ -73,6 +67,7 @@ public class ShowEncryptedBallotQRActivity extends Activity {
             }
         });
 
+        // Show the receive button after 5 seconds
         receiveButton.postDelayed(new Runnable() {
             public void run() {
                 receiveButton.setVisibility(View.VISIBLE);
@@ -92,18 +87,18 @@ public class ShowEncryptedBallotQRActivity extends Activity {
                 String signatureString = intent.getStringExtra("SCAN_RESULT");
 
                 // Create intent to initialize next activity (GenerateQRCode)
-                Intent intent2 = new Intent(this, GenerateQRCodeActivity.class);
+                Intent intent2 = new Intent(this, DisplayQRBallotActivity.class);
 
-                // Pass the values of encryptedBallot, randomness and selectedCandidate to the next activity
-                intent2.putExtra(GenerateQRCodeActivity.EXTRA_ENCRYPTED_BALLOT, encryptedBallot);
-                intent2.putExtra(GenerateQRCodeActivity.EXTRA_PLAIN_BALLOT, selectedCandidateText);
-                intent2.putExtra(GenerateQRCodeActivity.EXTRA_RANDOMNESS, randomness);
+                // Pass the values of encryptedVote, randomness and selectedCandidate to the next activity
+                intent2.putExtra(DisplayQRBallotActivity.EXTRA_ENCRYPTED_VOTE, encryptedVote);
+                intent2.putExtra(DisplayQRBallotActivity.EXTRA_PLAIN_BALLOT, selectedCandidateText);
+                intent2.putExtra(DisplayQRBallotActivity.EXTRA_RANDOMNESS, randomness);
 
                 // Transform the String of the signature to a byte[]
                 sigBytes = new BigInteger(signatureString).toByteArray();
 
                 // Pass the signature value (byte[]) to the next activity
-                intent2.putExtra(GenerateQRCodeActivity.EXTRA_SIGNATURE, sigBytes);
+                intent2.putExtra(DisplayQRBallotActivity.EXTRA_SIGNATURE, sigBytes);
 
                 // Start GenerateQRCode
                 startActivity(intent2);
