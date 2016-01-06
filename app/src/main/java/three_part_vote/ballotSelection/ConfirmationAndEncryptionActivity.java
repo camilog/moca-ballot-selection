@@ -10,7 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -50,7 +55,14 @@ public class ConfirmationAndEncryptionActivity extends Activity {
             @Override
             public void onClick(View view) {
                 // Encryption procedure of the candidate selected and store of the randomness used
-                BigInteger random = encryptionProcedure();
+                BigInteger random = null;
+                try {
+                    random = encryptionProcedure();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
                 randomUsed = random.toByteArray();
 
                 // Create intent to initialize the next activity (ShowQR)
@@ -77,7 +89,7 @@ public class ConfirmationAndEncryptionActivity extends Activity {
     }
 
     // Function that has all the procedure needed to get an encryption
-    private BigInteger encryptionProcedure() {
+    private BigInteger encryptionProcedure() throws IOException, ClassNotFoundException {
         // Variable to store publicKey that will be retrieved from a local file
         BigInteger publicKeyN = null;
 
@@ -91,7 +103,7 @@ public class ConfirmationAndEncryptionActivity extends Activity {
         }
 
         // Total number of candidates in the election
-        int numberOfCandidates = getResources().getInteger(R.integer.number_of_candidates);
+        int numberOfCandidates = createCandidatesList().number_of_candidates;
 
         // Get the position of the selectedCandidate, which has to be as the first characters of the name. If it isn't (throws exception) is because is a blank vote
         int candidateSelectedNumber;
@@ -132,6 +144,21 @@ public class ConfirmationAndEncryptionActivity extends Activity {
 
         // Return the randomness used to encrypt to verify it later
         return random;
+    }
+
+    private CandidatesList createCandidatesList() throws IOException, ClassNotFoundException {
+        AssetManager assetManager = getApplicationContext().getAssets();
+        Gson gson = new Gson();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(assetManager.open("candidatesList.json")));
+        String candidatesListJson = br.readLine();
+
+        // ObjectInputStream oin_key = new ObjectInputStream(new BufferedInputStream(assetManager.open("candidatesList.json")));
+        // String candidatesListJson = (String) oin_key.readObject();
+
+        CandidatesList candidatesList = gson.fromJson(candidatesListJson, CandidatesList.class);
+
+        return candidatesList;
     }
 
     // Function to directly encrypt the Ballot, using the parameters of the scheme, the randomness and the ballot itself
