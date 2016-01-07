@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -152,9 +153,6 @@ public class ConfirmationAndEncryptionActivity extends Activity {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(assetManager.open("candidatesList.json")));
         String candidatesListJson = br.readLine();
-
-        // ObjectInputStream oin_key = new ObjectInputStream(new BufferedInputStream(assetManager.open("candidatesList.json")));
-        // String candidatesListJson = (String) oin_key.readObject();
 
         CandidatesList candidatesList = gson.fromJson(candidatesListJson, CandidatesList.class);
 

@@ -37,7 +37,6 @@ public class DisplayCandidatesActivity extends Activity {
         ListView listView = (ListView) findViewById(R.id.candidates_listview);
 
         // Retrieve number of candidates in the election, and create an array of Strings (name of the candidates)
-        // final String[] candidates = new String[getResources().getInteger(R.integer.number_of_candidates)];
         String[] candidates = null;
         try {
             candidates = new String[createCandidatesList().number_of_candidates];
@@ -57,6 +56,7 @@ public class DisplayCandidatesActivity extends Activity {
         }
 
         // Add the last "candidate", a blank vote
+        // TODO: Change this to support multi language (add blank vote on candidates list?)
         list.add("Voto Blanco");
 
         // Create an adapter to show the candidates in a nice way
@@ -71,9 +71,6 @@ public class DisplayCandidatesActivity extends Activity {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(assetManager.open("candidatesList.json")));
         String candidatesListJson = br.readLine();
-
-        // ObjectInputStream oin_key = new ObjectInputStream(new BufferedInputStream(assetManager.open("candidatesList.json")));
-        // String candidatesListJson = (String) oin_key.readObject();
 
         CandidatesList candidatesList = gson.fromJson(candidatesListJson, CandidatesList.class);
 
