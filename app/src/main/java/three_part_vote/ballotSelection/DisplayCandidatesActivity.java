@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -39,6 +40,12 @@ public class DisplayCandidatesActivity extends Activity {
         // Retrieve number of candidates in the election, and create an array of Strings (name of the candidates)
         String[] candidates = null;
         try {
+
+            // Set title using information on candidatesList.json
+            String question = createCandidatesList().question;
+            TextView titleView = (TextView) findViewById(R.id.title);
+            titleView.setText(question);
+
             candidates = new String[createCandidatesList().number_of_candidates];
 
             // Set-up of the String[], putting the names of every candidate

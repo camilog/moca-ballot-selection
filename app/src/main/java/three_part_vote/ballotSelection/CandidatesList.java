@@ -4,5 +4,6 @@ public class CandidatesList {
 
     int number_of_candidates;
     Candidate[] candidates;
+    String question;
 
 }
