@@ -18,5 +18,14 @@
     <string name="title_activity_show_qr">ShowQRActivity</string>
     <string name="continue_to_receive_signature">Receive Signature</string>
     <string name="read_encrypted_qr">Read this QR code with your VoterApp</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_configuration">ConfigurationActivity</string>
+    <string name="receive_candidates">Receive Candidates</string>
+    <string name="read_candidate_qr">Press \'Receive Candidates\' to configure election information.
+    Put QR code generated from AdminApp near camera. </string>
+    <string name="read_public_key_qr">Press \'Receive Public Key\' to configure election information.
+    Put QR code generated from AdminApp near camera. </string>
+    <string name="receive_public_key">Receive Public Key</string>
+    <string name="title_activity_display_candidates">DisplayCandidatesActivity</string>
 
 </resources>

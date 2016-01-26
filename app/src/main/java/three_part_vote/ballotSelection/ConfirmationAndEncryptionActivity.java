@@ -1,6 +1,7 @@
 package three_part_vote.ballotSelection;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -12,18 +13,32 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
 import paillierp.Paillier;
 import paillierp.key.PaillierKey;
 
+/**
+ * Modified by diego diaz on 26-01-16.
+ */
 public class ConfirmationAndEncryptionActivity extends Activity {
 
     // EXTRA to store candidate selected (CharSequence)
@@ -91,17 +106,18 @@ public class ConfirmationAndEncryptionActivity extends Activity {
 
     // Function that has all the procedure needed to get an encryption
     private BigInteger encryptionProcedure() throws IOException, ClassNotFoundException {
-        // Variable to store publicKey that will be retrieved from a local file
+        // Variable to store publicKey that will be retrieved from local storage of the app
         BigInteger publicKeyN = null;
+        File publicKeyDir = getApplicationContext().getDir("publicKeyN", Context.MODE_PRIVATE);
+        File publicKeyFile = new File(publicKeyDir, "publicKeyN.key");
+        String publicKeyString = "";
 
-        // Retrieve publicKey from local file using an assetManager, and store it in publicKeyN
-        AssetManager assetManager = getApplicationContext().getAssets();
         try {
-            ObjectInputStream oin_key = new ObjectInputStream(new BufferedInputStream(assetManager.open("publicKeyN")));
-            publicKeyN = (BigInteger) oin_key.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            BufferedReader reader = new BufferedReader(new FileReader(publicKeyFile));
+            publicKeyString = reader.readLine();
+        } catch (IOException e) {}
+
+        publicKeyN = new BigInteger(publicKeyString);
 
         // Total number of candidates in the election
         int numberOfCandidates = createCandidatesList().number_of_candidates;
@@ -147,12 +163,14 @@ public class ConfirmationAndEncryptionActivity extends Activity {
         return random;
     }
 
+    //Function now gets candidate list stored in local storage of the app
     private CandidatesList createCandidatesList() throws IOException, ClassNotFoundException {
-        AssetManager assetManager = getApplicationContext().getAssets();
-        Gson gson = new Gson();
+        File candidateListDir = getApplicationContext().getDir("candidateList", Context.MODE_PRIVATE);
+        File candidateListFile = new File(candidateListDir, "candidateList.json");
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(assetManager.open("candidatesList.json")));
-        String candidatesListJson = br.readLine();
+        BufferedReader reader = new BufferedReader(new FileReader(candidateListFile));
+        String candidatesListJson = reader.readLine();
+        Gson gson = new Gson();
 
         CandidatesList candidatesList = gson.fromJson(candidatesListJson, CandidatesList.class);
 

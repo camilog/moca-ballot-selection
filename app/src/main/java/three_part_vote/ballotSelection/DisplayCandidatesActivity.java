@@ -72,12 +72,14 @@ public class DisplayCandidatesActivity extends Activity {
 
     }
 
+    //Function now retrieves candidate info from local app storage
     private CandidatesList createCandidatesList() throws IOException, ClassNotFoundException {
-        AssetManager assetManager = getApplicationContext().getAssets();
-        Gson gson = new Gson();
+        File candidateListDir = getApplicationContext().getDir("candidateList", Context.MODE_PRIVATE);
+        File candidateListFile = new File(candidateListDir, "candidateList.json");
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(assetManager.open("candidatesList.json")));
-        String candidatesListJson = br.readLine();
+        BufferedReader reader = new BufferedReader(new FileReader(candidateListFile));
+        String candidatesListJson = reader.readLine();
+        Gson gson = new Gson();
 
         CandidatesList candidatesList = gson.fromJson(candidatesListJson, CandidatesList.class);
 
