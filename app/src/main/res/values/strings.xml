@@ -27,5 +27,6 @@
     Put QR code generated from AdminApp near camera. </string>
     <string name="receive_public_key">Receive Public Key</string>
     <string name="title_activity_display_candidates">DisplayCandidatesActivity</string>
+    <string name="title_activity_capture_code">CaptureCodeActivity</string>
 
 </resources>

@@ -3,7 +3,7 @@ package three_part_vote.ballotSelection;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -14,10 +14,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
 /**
  * Created by diego diaz on 26-01-16.
  */
-public class ConfigurationActivity extends Activity {
+
+public class ConfigurationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +30,7 @@ public class ConfigurationActivity extends Activity {
         receiveList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                intent.putExtra("SCAN_CAMERA_ID", 1);
+                Intent intent = new Intent(ConfigurationActivity.this, CaptureCodeActivity.class);
                 startActivityForResult(intent, 0);
             }
         });
@@ -39,9 +39,7 @@ public class ConfigurationActivity extends Activity {
         receiveKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                intent.putExtra("SCAN_CAMERA_ID", 1);
+                Intent intent = new Intent(ConfigurationActivity.this, CaptureCodeActivity.class);
                 startActivityForResult(intent, 1);
             }
         });
@@ -111,4 +109,5 @@ public class ConfigurationActivity extends Activity {
             }
         }
     }
+
 }

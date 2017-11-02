@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.math.BigInteger;
@@ -57,13 +59,16 @@ public class DisplayQREncryptedVoteActivity extends Activity {
         receiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Initialize the SCAN application to retrieve the signature from the other device
-                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                intent.putExtra("SCAN_CAMERA_ID", 1);
 
                 // Start SCAN activity
-                startActivityForResult(intent, 0);
+//                Intent intent = new Intent(DisplayQREncryptedVoteActivity.this, CaptureCodeActivity.class);
+//                startActivityForResult(intent, 0);
+
+                IntentIntegrator intentIntegrator = new IntentIntegrator(DisplayQREncryptedVoteActivity.this);
+                intentIntegrator.setCaptureActivity(CaptureCodeActivity.class);
+                intentIntegrator.setCameraId(1);
+                intentIntegrator.initiateScan();
+
             }
         });
 
@@ -78,11 +83,14 @@ public class DisplayQREncryptedVoteActivity extends Activity {
 
     // Handle the result of the SCAN activity
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+
         // Id of the SCAN activity initialized before
-        if (requestCode == 0) {
+//        if (requestCode == 0) {
 
             // Handle successful scan
-            if (resultCode == RESULT_OK) {
+//            if (resultCode == RESULT_OK) {
                 // Retrieve signature from the SCAN, and store it in a String
                 String signatureString = intent.getStringExtra("SCAN_RESULT");
 
@@ -103,14 +111,14 @@ public class DisplayQREncryptedVoteActivity extends Activity {
                 // Start GenerateQRCode
                 startActivity(intent2);
 
-            } else if (resultCode == RESULT_CANCELED) {
-                // Handle cancelled scan
-                Toast toast = Toast.makeText(this, "Scan was Cancelled!", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 25, 400);
-                toast.show();
-            }
-
-        }
+//            } else if (resultCode == RESULT_CANCELED) {
+//                // Handle cancelled scan
+//                Toast toast = Toast.makeText(this, "Scan was Cancelled!", Toast.LENGTH_LONG);
+//                toast.setGravity(Gravity.TOP, 25, 400);
+//                toast.show();
+//            }
+//
+//        }
     }
 
     // Function to generate QRCode Bitmap from a String

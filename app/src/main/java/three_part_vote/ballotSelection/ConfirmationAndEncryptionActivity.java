@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,12 +97,15 @@ public class ConfirmationAndEncryptionActivity extends Activity {
         BigInteger publicKeyN = null;
         File publicKeyDir = getApplicationContext().getDir("publicKeyN", Context.MODE_PRIVATE);
         File publicKeyFile = new File(publicKeyDir, "publicKeyN.key");
-        String publicKeyString = "";
+        String publicKeyInfo = "";
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(publicKeyFile));
-            publicKeyString = reader.readLine();
+            publicKeyInfo = reader.readLine();
         } catch (IOException e) {}
+
+
+        String publicKeyString = new Gson().fromJson(publicKeyInfo, PublicKey.class).n;
 
         publicKeyN = new BigInteger(publicKeyString);
 
@@ -115,6 +119,8 @@ public class ConfirmationAndEncryptionActivity extends Activity {
         } catch (NumberFormatException e) {
             candidateSelectedNumber = numberOfCandidates + 1;
         }
+
+        Log.e("tag", "candidate selected: " + candidateSelectedNumber);
 
         // Create the object Plain Vote
         PlainVote plainVote = new PlainVote(numberOfCandidates, candidateSelectedNumber);
@@ -150,7 +156,7 @@ public class ConfirmationAndEncryptionActivity extends Activity {
     }
 
     //Function now gets candidate list stored in local storage of the app
-    private CandidatesList createCandidatesList() throws IOException, ClassNotFoundException {
+    private Election createCandidatesList() throws IOException, ClassNotFoundException {
         File candidateListDir = getApplicationContext().getDir("candidateList", Context.MODE_PRIVATE);
         File candidateListFile = new File(candidateListDir, "candidateList.json");
 
@@ -158,9 +164,9 @@ public class ConfirmationAndEncryptionActivity extends Activity {
         String candidatesListJson = reader.readLine();
         Gson gson = new Gson();
 
-        CandidatesList candidatesList = gson.fromJson(candidatesListJson, CandidatesList.class);
+        Election election = gson.fromJson(candidatesListJson, Election.class);
 
-        return candidatesList;
+        return election;
     }
 
     // Function to directly encrypt the Ballot, using the parameters of the scheme, the randomness and the ballot itself

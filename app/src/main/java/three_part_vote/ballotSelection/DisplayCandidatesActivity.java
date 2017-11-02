@@ -55,7 +55,7 @@ public class DisplayCandidatesActivity extends Activity {
         // Create an ArrayList from the String[] to store the candidates and display them
         final ArrayList<String> list = new ArrayList<String>();
         for (int i = 0; i < candidates.length; ++i) {
-            list.add(candidates[i]);
+            list.add(idOfCandidate(i + 1) + " - " + candidates[i]);
         }
 
         // Add the last "candidate", a blank vote
@@ -68,8 +68,17 @@ public class DisplayCandidatesActivity extends Activity {
 
     }
 
+    private String idOfCandidate(int i) {
+        if (i >= 10) {
+            return "" + i;
+        }
+        else {
+            return "0" + i;
+        }
+    }
+
     //Function now retrieves candidate info from local app storage
-    private CandidatesList createCandidatesList() throws IOException, ClassNotFoundException {
+    private Election createCandidatesList() throws IOException, ClassNotFoundException {
         File candidateListDir = getApplicationContext().getDir("candidateList", Context.MODE_PRIVATE);
         File candidateListFile = new File(candidateListDir, "candidateList.json");
 
@@ -77,9 +86,9 @@ public class DisplayCandidatesActivity extends Activity {
         String candidatesListJson = reader.readLine();
         Gson gson = new Gson();
 
-        CandidatesList candidatesList = gson.fromJson(candidatesListJson, CandidatesList.class);
+        Election election = gson.fromJson(candidatesListJson, Election.class);
 
-        return candidatesList;
+        return election;
     }
 
     // Class of Adapter
